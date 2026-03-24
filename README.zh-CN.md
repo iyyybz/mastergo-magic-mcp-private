@@ -1,117 +1,99 @@
-# MasterGo Magic MCP
+# MasterGo Magic MCP（fork）
 
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/mastergo-design/mastergo-magic-mcp)
 
-MasterGo Magic MCP 是一个独立的 MCP（Model Context Protocol）服务，旨在连接 MasterGo 设计工具与 AI 模型。它使 AI 模型能够直接从 MasterGo 设计文件中获取 DSL 数据。
+本仓库是 [mastergo-design/mastergo-magic-mcp](https://github.com/mastergo-design/mastergo-magic-mcp) 的 **fork**，在 npm 上发布为 **`magic-mcp-private`**，并增加可选的 **Cookie** 支持与浏览器**油猴脚本**辅助。其余能力（MCP 功能说明、MasterGo 令牌获取、权限与团队文件要求、Smithery、LINGMA 图文步骤等）与上游一致——**请直接阅读官方 README**，本文不再重复粘贴。
 
-## 主要特性
+## 官方文档（上游）
 
-- 从 MasterGo 设计文件中获取 DSL 数据
-- 可直接通过 npx 运行
-- 仅需 Node.js 环境，无需其他外部依赖
+完整用法请查看 **官方** 文档（教程、获取 `MG_MCP_TOKEN`、账户/文件权限、Smithery、LINGMA 截图流程、各客户端通用配置等）：
 
-## 教程
+- **中文：** [github.com/mastergo-design/mastergo-magic-mcp — README.zh-CN.md](https://github.com/mastergo-design/mastergo-magic-mcp/blob/main/README.zh-CN.md)
+- **English:** [github.com/mastergo-design/mastergo-magic-mcp — README.md](https://github.com/mastergo-design/mastergo-magic-mcp/blob/main/README.md)
 
-- https://mastergo.com/file/155675508499265?page_id=158:0002
+对照官方示例时，请把 **`@mastergo/magic-mcp`** 换成 **`magic-mcp-private`**（`npm` / `npx` / MCP `args`），详见下文 [从上游迁移](#从上游迁移)。
 
-## 使用方法
+**Cursor 官方说明：** [在 Cursor 中使用 MCP](https://docs.cursor.com/context/model-context-protocol#using-mcp-tools-in-agent)
 
-### 获取 MG_MCP_TOKEN
+---
 
-1. 访问 https://mastergo.com
-2. 进入个人设置
-3. 点击安全设置选项卡
-4. 找到个人访问令牌
-5. 点击生成令牌
+## 从上游迁移
 
-### 权限要求
+若曾使用 **`@mastergo/magic-mcp`**：
 
-**重要提示**：如果工具已连接但返回"没有权限"错误，请检查以下条件：
+| | 上游 | 本 fork |
+|---|------|---------|
+| npm 包名 | `@mastergo/magic-mcp` | `magic-mcp-private` |
+| npx | `npx @mastergo/magic-mcp …` | `npx magic-mcp-private …` |
+| MCP `args` | `-y @mastergo/magic-mcp` | `-y magic-mcp-private` |
+| 可执行命令（`package.json` → `bin`） | `mastergo-magic-mcp` | `magic-mcp-private` |
 
-1. **账户版本要求**：
-   - 需要 **团队版** 或 **团队版以上** 的 MasterGo 账户
-   - 个人免费版不支持 MCP 工具访问
+---
 
-2. **文件位置要求**：
-   - 设计文件必须放在 **团队项目** 中
-   - 草稿箱中的文件无法通过 MCP 工具访问
+## 命令行与环境变量（本 fork 增量说明）
 
-### 命令行选项
+在官方参数基础上，本 fork 增加 **`--cookie`** 及 Cookie 相关环境变量，完整示例如下：
 
-```
-npx @mastergo/magic-mcp --token=YOUR_TOKEN [--url=API_URL] [--rule=RULE_NAME] [--debug] [--no-rule]
+```text
+npx magic-mcp-private --token=YOUR_TOKEN [--url=API_URL] [--cookie=COOKIE] [--rule=RULE_NAME] [--debug] [--no-rule]
 ```
 
-#### 参数:
+| 参数 / 环境变量 | 说明 |
+|-----------------|------|
+| `--token` | 必填，与上游相同的 MasterGo 令牌（`MG_MCP_TOKEN` / `MASTERGO_API_TOKEN`）。 |
+| `--url` | 可选，本地开发常见 `http://localhost:3000`，线上多为 `https://mastergo.com`。 |
+| `--cookie` | 可选，发往 MasterGo API 的 `Cookie`。**勿将真实值写入仓库**；生产环境优先环境变量。 |
+| `--rule` / `--debug` / `--no-rule` | 与上游含义一致。 |
+| `API_BASE_URL` | 与上游一致。 |
+| `MG_MCP_COOKIE` / `MASTERGO_API_COOKIE` | 可选；若同时配置 CLI `--cookie`，以 CLI 为准。 |
+| `RULES` | 与上游一致（JSON 数组字符串）。 |
 
-- `--token=YOUR_TOKEN` (必需): MasterGo API 认证令牌
-- `--url=API_URL` (可选): API 基础 URL，默认为 http://localhost:3000
-- `--rule=RULE_NAME` (可选): 添加要应用的设计规则，可多次使用
-- `--debug` (可选): 启用调试模式，提供详细错误信息
-- `--no-rule` (可选): 禁用默认规则
+### Cookie 使用示例
 
-你也可以使用空格分隔的参数格式:
+除 Token 外若还需会话 Cookie，文档与 Git 中请使用占位符。
 
+**优先级：** 若在更底层自行设置请求 `Cookie`，以该值为准；否则 CLI `--cookie` 优先于 `MG_MCP_COOKIE` / `MASTERGO_API_COOKIE`。
+
+**命令行一行示例：**
+
+```bash
+npx magic-mcp-private --token=YOUR_TOKEN --url=https://mastergo.com --cookie="session_id=<YOUR_VALUE>; path=/"
 ```
-npx @mastergo/magic-mcp --token YOUR_TOKEN --url API_URL --rule RULE_NAME --debug
-```
 
-#### 环境变量
-
-您也可以使用环境变量代替命令行参数：
-
-- `MG_MCP_TOKEN` 或 `MASTERGO_API_TOKEN`: MasterGo API 令牌
-- `API_BASE_URL`: API 基础 URL
-- `RULES`: 规则的 JSON 数组 (例如: `'["rule1", "rule2"]'`)
-
-### 通过 Smithery 市场安装
-
-
-#### 方式一：通过 Smithery 网站安装
-
-1. 访问 [Smithery 市场](https://smithery.ai/server/master/mastergo-magic-mcp-smithery)
-2. 选择你的 MCP 客户端（如 Claude Desktop、Cursor 等）
-4. one-click install 打开对应客户端，弹出tools&mcp 点击install
-5. connect->open->optional setting中填入token->connect
-
-### LINGMA 使用方法
-
-在 vscode 拓展市场中搜索 LINGMA -> 然后安装该拓展
-
-<img src="https://github.com/mastergo-design/mastergo-magic-mcp/blob/main/images/image-20250507174245589.png" alt="image-20250507174245589" style="zoom:25%;" />
-
-登录后 -> 在聊天框中点击 [MCP tools]
-
-<img src="https://github.com/mastergo-design/mastergo-magic-mcp/blob/main/images/image-20250507174511910.png" alt="image-20250507174511910" style="zoom:25%;" />
-
-点击顶部 [MCP Sqaure] 进入mcp市场，在市场中找到 Mastergo设计协作工具并安装
-
-<img src="https://github.com/mastergo-design/mastergo-magic-mcp/blob/main/images/image-20250507174840456.png" alt="image-20250507174840456" style="zoom:25%;" />
-
-安装完成后，需要回到 [MCP Servers], 并编辑我们的mcp服务，将自己的mastergo token 替换上去
-
-<img src="https://github.com/mastergo-design/mastergo-magic-mcp/blob/main/images/image-20250507175005364.png" alt="image-20250507175005364" style="zoom:25%;" />
-
-最后在聊天界面中将聊天模式切换为agent模式。
-
-<img src="https://github.com/mastergo-design/mastergo-magic-mcp/blob/main/images/image-20250507175107044.png" alt="image-20250507175107044" style="zoom:25%;" />
-
-### Cursor 使用方法
-
-Cursor Mcp 使用指南参考：https://docs.cursor.com/context/model-context-protocol#using-mcp-tools-in-agent
-
-您可以使用命令行参数或环境变量来配置 MCP 服务：
-
-**方式一：使用命令行参数**
+**仅用 MCP `env` 注入 Cookie：**
 
 ```json
 {
   "mcpServers": {
-    "mastergo-magic-mcp": {
+    "magic-mcp-private": {
+      "command": "npx",
+      "args": ["-y", "magic-mcp-private", "--token=<YOUR_TOKEN>", "--url=https://mastergo.com"],
+      "env": {
+        "MG_MCP_COOKIE": "<YOUR_COOKIE_STRING>"
+      }
+    }
+  }
+}
+```
+
+可与 `MASTERGO_API_TOKEN` 命名对称，使用 `MASTERGO_API_COOKIE` 代替 `MG_MCP_COOKIE`。
+
+### 浏览器油猴脚本（可选）
+
+从页签复制**非 HttpOnly** Cookie 供 `MG_MCP_COOKIE` 使用，见 **[userscripts/README.md](userscripts/README.md)**。HttpOnly 无法被页面脚本读取。
+
+### Cursor：最小 `mcp.json` 示例
+
+结构与 [上游 README 中的 Cursor 配置示例](https://github.com/mastergo-design/mastergo-magic-mcp/blob/main/README.zh-CN.md) 相同，仅包名替换为 **`magic-mcp-private`**：
+
+```json
+{
+  "mcpServers": {
+    "magic-mcp-private": {
       "command": "npx",
       "args": [
         "-y",
-        "@mastergo/magic-mcp",
+        "magic-mcp-private",
         "--token=<MG_MCP_TOKEN>",
         "--url=https://mastergo.com"
       ],
@@ -121,112 +103,20 @@ Cursor Mcp 使用指南参考：https://docs.cursor.com/context/model-context-pr
 }
 ```
 
-**方式二：使用环境变量**
+**cline** 等客户端请按上游 README 配置，并将包名改为 **`magic-mcp-private`**。
 
-```json
-{
-  "mcpServers": {
-    "mastergo-magic-mcp": {
-      "command": "npx",
-      "args": ["-y", "@mastergo/magic-mcp"],
-      "env": {
-        "MG_MCP_TOKEN": "<YOUR_TOKEN>",
-        "API_BASE_URL": "https://mastergo.com"
-      }
-    }
-  }
-}
-```
-
-### cline 使用方法
-
-**方式一：使用命令行参数**
-
-```json
-{
-  "mcpServers": {
-    "@master/mastergo-magic-mcp": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@mastergo/magic-mcp",
-        "--token=<MG_MCP_TOKEN>",
-        "--url=https://mastergo.com"
-      ],
-      "env": {}
-    }
-  }
-}
-```
-
-**方式二：使用环境变量**
-
-```json
-{
-  "mcpServers": {
-    "@master/mastergo-magic-mcp": {
-      "command": "npx",
-      "args": ["-y", "@mastergo/magic-mcp"],
-      "env": {
-        "MG_MCP_TOKEN": "<YOUR_TOKEN>",
-        "API_BASE_URL": "https://mastergo.com"
-      }
-    }
-  }
-}
-```
-
-## 项目结构
-
-### src 目录
-
-`src` 目录包含 MasterGo Magic MCP 服务的核心实现：
-
-- `index.ts`：应用程序入口点，初始化 MCP 服务器并注册所有工具
-- `http-util.ts`：处理与 MasterGo API 通信的 HTTP 请求工具
-- `types.d.ts`：项目的 TypeScript 类型定义
-
-#### src/tools
-
-包含 MCP 工具的实现：
-
-- `base-tool.ts`：所有 MCP 工具的基类
-- `get-dsl.ts`：从 MasterGo 设计文件中获取 DSL（领域特定语言）数据的工具
-- `get-component-link.ts`：从链接中获取组件文档的工具
-- `get-meta.ts`：获取元数据信息的工具
-- `get-component-workflow.ts`：提供结构化的组件开发工作流工具，支持 Vue 和 React 组件开发，生成所需的工作流文件和组件规范
-
-#### src/markdown
-
-包含附加文档的 markdown 文件：
-
-- `meta.md`：关于元数据结构和用法的文档
-- `component-workflow.md`：组件开发工作流程文档，指导结构化组件开发过程
+---
 
 ## 本地开发
 
-1. 运行 `yarn` 和 `yarn build`，安装依赖并构建代码
-2. 查看 `dist/index.js` 的绝对路径
-3. 在 MCP 配置中添加本地 MCP 配置，其中 token 为您获取的 token
-
-```json
-"mastergo-mcp-local": {
-  "command": "node",
-  "args": [
-    "dist/index.js绝对路径地址",
-    "--token=mg_xxxxxx",
-    "--url=https://mastergo.com",
-    "--debug"
-  ],
-  "env": {}
-},
+```bash
+npm install
+npm run build
 ```
 
-4. 重启编辑器，确认本地 MCP 已开启
+在 MCP 配置中使用 **`dist/index.js`** 的绝对路径，带上 token、`--url` 等，与上游本地调试方式相同。
 
-运行成功后，就可以基于本地运行的结果进行调试。您可以基于自己的修改构建自己的 MCP 服务。
-
-欢迎您为我们提供代码贡献，并期待大家一起共建 MasterGo 的 MCP 服务。
+---
 
 ## 许可证
 

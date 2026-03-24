@@ -75,18 +75,37 @@ function parseNoRule(): boolean {
   return false;
 }
 
+function parseCookie(): string {
+  const args = getArgs();
+  let cookie = "";
+
+  for (let i = 0; i < args.length; i++) {
+    if (args[i] === "--cookie" && i + 1 < args.length) {
+      cookie = args[i + 1];
+      break;
+    } else if (args[i].startsWith("--cookie=")) {
+      cookie = args[i].split("=").slice(1).join("=");
+      break;
+    }
+  }
+
+  return cookie;
+}
+
 export function parserArgs(): {
   token: string;
   baseUrl: string;
   rules: string[];
   debug: boolean;
   noRule: boolean;
+  cookie: string;
 } {
   const token = parseToken();
   const baseUrl = parseUrl();
   const rules = parseRules();
   const debug = parseDebug();
   const noRule = parseNoRule();
+  const cookie = parseCookie();
 
   return {
     token,
@@ -94,7 +113,16 @@ export function parserArgs(): {
     rules,
     debug,
     noRule,
+    cookie,
   };
 }
 
-export { parseToken, parseUrl, parseRules, parseDebug, parseNoRule, getArgs };
+export {
+  parseToken,
+  parseUrl,
+  parseRules,
+  parseDebug,
+  parseNoRule,
+  parseCookie,
+  getArgs,
+};

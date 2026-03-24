@@ -1,5 +1,11 @@
 import axios, { AxiosRequestConfig } from "axios";
-import { parseToken, parseUrl, parseRules, parseNoRule } from "./args";
+import {
+  parseToken,
+  parseUrl,
+  parseRules,
+  parseNoRule,
+  parseCookie,
+} from "./args";
 import https from "https";
 
 axios.defaults.httpsAgent = new https.Agent({
@@ -17,12 +23,30 @@ export interface CodeResponse {
   [key: string]: any;
 }
 
-const getCommonHeader = () => ({
-  "Content-Type": "application/json",
-  Accept: "application/json",
-  "X-MG-UserAccessToken":
-    process.env.MG_MCP_TOKEN || process.env.MASTERGO_API_TOKEN || parseToken(),
-});
+/** CLI 优先于环境变量；用于默认请求头（单次请求的 headers.Cookie 仍优先生效）。 */
+const getConfiguredCookie = (): string => {
+  const fromCli = parseCookie();
+  if (fromCli) return fromCli;
+  return (
+    process.env.MG_MCP_COOKIE ||
+    process.env.MASTERGO_API_COOKIE ||
+    ""
+  );
+};
+
+const getCommonHeader = (): Record<string, string> => {
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+    "X-MG-UserAccessToken":
+      process.env.MG_MCP_TOKEN || process.env.MASTERGO_API_TOKEN || parseToken(),
+  };
+  const cookie = getConfiguredCookie();
+  if (cookie) {
+    headers.Cookie = cookie;
+  }
+  return headers;
+};
 
 const getBaseUrl = () => {
   const url = process.env.API_BASE_URL || parseUrl();
@@ -147,7 +171,7 @@ const createHttpUtil = () => {
     ): Promise<{ fileId: string; layerId: string }> {
       let targetUrl = url;
 
-      // Handle short links
+      // Handle short links（不附带 MCP 配置的 Cookie，避免向第三方跳转域泄露会话）
       if (url.includes("/goto/")) {
         const response = await axios.get(url, {
           maxRedirects: 0,

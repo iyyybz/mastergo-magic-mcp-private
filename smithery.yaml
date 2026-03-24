@@ -9,6 +9,7 @@ startCommand:
       const args = [];
       args.push(`--token=${config.token}`);
       if (config.url) args.push(`--url=${config.url}`);
+      if (config.cookie) args.push(`--cookie=${config.cookie}`);
       if (config.rules) {
         config.rules.forEach(rule => args.push(`--rule=${rule}`));
       }
@@ -28,6 +29,9 @@ startCommand:
         type: string
         default: https://mastergo.com
         description: API base URL
+      cookie:
+        type: string
+        description: Optional Cookie header for MasterGo API requests
       rules:
         type: array
         items:
