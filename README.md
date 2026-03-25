@@ -2,7 +2,9 @@
 
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/mastergo-design/mastergo-magic-mcp)
 
-This repository is a **fork** of [mastergo-design/mastergo-magic-mcp](https://github.com/mastergo-design/mastergo-magic-mcp). It publishes to npm as **`magic-mcp-private`** and adds optional **Cookie** support and a small **userscript** helper. Everything else (what the MCP does, MasterGo token, permissions, Smithery, LINGMA walkthroughs, etc.) is the same as upstream—see the links below instead of duplicating them here.
+This repository is a **fork** of [mastergo-design/mastergo-magic-mcp](https://github.com/mastergo-design/mastergo-magic-mcp). It publishes to npm as **`mastergo-magic-mcp-private`** and adds optional **Cookie** support and a small **userscript** helper. Everything else (what the MCP does, MasterGo token, permissions, Smithery, LINGMA walkthroughs, etc.) is the same as upstream—see the links below instead of duplicating them here.
+
+**中文文档（本仓库）：** [README.zh-CN.md](README.zh-CN.md)
 
 ## Upstream documentation
 
@@ -11,7 +13,7 @@ Read the **official** README for full usage (tutorial, how to get `MG_MCP_TOKEN`
 - **English:** [github.com/mastergo-design/mastergo-magic-mcp — README.md](https://github.com/mastergo-design/mastergo-magic-mcp/blob/main/README.md)
 - **中文:** [github.com/mastergo-design/mastergo-magic-mcp — README.zh-CN.md](https://github.com/mastergo-design/mastergo-magic-mcp/blob/main/README.zh-CN.md)
 
-When you follow upstream examples, replace **`@mastergo/magic-mcp`** with **`magic-mcp-private`** in `npm` / `npx` commands and MCP `args` (see [Migration](#migration-from-upstream)).
+When you follow upstream examples, replace **`@mastergo/magic-mcp`** with **`mastergo-magic-mcp-private`** in `npm` / `npx` commands and MCP `args` (see [Migration](#migration-from-upstream)).
 
 **Cursor MCP** (official): [Using MCP in Cursor](https://docs.cursor.com/context/model-context-protocol#using-mcp-tools-in-agent)
 
@@ -23,10 +25,18 @@ If you used **`@mastergo/magic-mcp`** before:
 
 | | Upstream | This fork |
 |---|----------|-----------|
-| npm package | `@mastergo/magic-mcp` | `magic-mcp-private` |
-| npx | `npx @mastergo/magic-mcp …` | `npx magic-mcp-private …` |
-| MCP `args` | `-y @mastergo/magic-mcp` | `-y magic-mcp-private` |
-| Binary (`package.json` → `bin`) | `mastergo-magic-mcp` | `magic-mcp-private` |
+| npm package | `@mastergo/magic-mcp` | `mastergo-magic-mcp-private` |
+| npx | `npx @mastergo/magic-mcp …` | `npx mastergo-magic-mcp-private …` |
+| MCP `args` | `-y @mastergo/magic-mcp` | `-y mastergo-magic-mcp-private` |
+| Binary (`package.json` → `bin`) | `mastergo-magic-mcp` | `mastergo-magic-mcp-private` |
+
+### BREAKING: rename from `magic-mcp-private` (npm)
+
+This fork’s npm package was previously published as **`magic-mcp-private`**. It is now **`mastergo-magic-mcp-private`** (aligned with this repository name).
+
+- Remove the old dependency or global install if applicable: e.g. `npm uninstall magic-mcp-private` (add `-g` if you installed globally).
+- Install or run with the new name: `npm install mastergo-magic-mcp-private` or `npx -y mastergo-magic-mcp-private ...`.
+- Update MCP configs: replace `-y magic-mcp-private` with `-y mastergo-magic-mcp-private`, and use the **`mastergo-magic-mcp-private`** CLI name anywhere you previously invoked **`magic-mcp-private`**.
 
 ---
 
@@ -35,7 +45,7 @@ If you used **`@mastergo/magic-mcp`** before:
 Full options are listed here because **`--cookie`** and cookie env vars are additions on top of upstream.
 
 ```text
-npx magic-mcp-private --token=YOUR_TOKEN [--url=API_URL] [--cookie=COOKIE] [--rule=RULE_NAME] [--debug] [--no-rule]
+npx mastergo-magic-mcp-private --token=YOUR_TOKEN [--url=API_URL] [--cookie=COOKIE] [--rule=RULE_NAME] [--debug] [--no-rule]
 ```
 
 | Flag / env | Notes |
@@ -57,7 +67,7 @@ Gateways sometimes need a session cookie in addition to the token. Use **placeho
 **One-line CLI:**
 
 ```bash
-npx magic-mcp-private --token=YOUR_TOKEN --url=https://mastergo.com --cookie="session_id=<YOUR_VALUE>; path=/"
+npx mastergo-magic-mcp-private --token=YOUR_TOKEN --url=https://mastergo.com --cookie="session_id=<YOUR_VALUE>; path=/"
 ```
 
 **MCP client via `env` only:**
@@ -65,9 +75,9 @@ npx magic-mcp-private --token=YOUR_TOKEN --url=https://mastergo.com --cookie="se
 ```json
 {
   "mcpServers": {
-    "magic-mcp-private": {
+    "mastergo-magic-mcp-private": {
       "command": "npx",
-      "args": ["-y", "magic-mcp-private", "--token=<YOUR_TOKEN>", "--url=https://mastergo.com"],
+      "args": ["-y", "mastergo-magic-mcp-private", "--token=<YOUR_TOKEN>", "--url=https://mastergo.com"],
       "env": {
         "MG_MCP_COOKIE": "<YOUR_COOKIE_STRING>"
       }
@@ -89,11 +99,11 @@ Same structure as [upstream README — Cursor](https://github.com/mastergo-desig
 ```json
 {
   "mcpServers": {
-    "magic-mcp-private": {
+    "mastergo-magic-mcp-private": {
       "command": "npx",
       "args": [
         "-y",
-        "magic-mcp-private",
+        "mastergo-magic-mcp-private",
         "--token=<MG_MCP_TOKEN>",
         "--url=https://mastergo.com"
       ],
@@ -103,7 +113,7 @@ Same structure as [upstream README — Cursor](https://github.com/mastergo-desig
 }
 ```
 
-For **cline** and other editors, follow the upstream README and replace the package name with **`magic-mcp-private`**.
+For **cline** and other editors, follow the upstream README and replace the package name with **`mastergo-magic-mcp-private`**.
 
 ---
 

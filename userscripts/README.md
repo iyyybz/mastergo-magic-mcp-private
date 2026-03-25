@@ -1,6 +1,6 @@
 # Userscripts
 
-Helper scripts for browser workflows related to **magic-mcp-private** (not required to run the Node MCP server).
+Helper scripts for browser workflows related to **mastergo-magic-mcp-private** (not required to run the Node MCP server).
 
 ## `copy-cookie-by-name.user.js`
 

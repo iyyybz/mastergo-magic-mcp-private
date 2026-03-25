@@ -1,10 +1,10 @@
 {
-  "name": "magic-mcp-private",
-  "version": "0.1.5",
+  "name": "mastergo-magic-mcp-private",
+  "version": "0.1.4",
   "description": "MasterGo MCP standalone service",
   "main": "dist/index.js",
   "bin": {
-    "magic-mcp-private": "dist/index.js"
+    "mastergo-magic-mcp-private": "dist/index.js"
   },
   "files": [
     "dist/**/*",

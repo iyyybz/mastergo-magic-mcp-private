@@ -2,7 +2,7 @@
 
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/mastergo-design/mastergo-magic-mcp)
 
-本仓库是 [mastergo-design/mastergo-magic-mcp](https://github.com/mastergo-design/mastergo-magic-mcp) 的 **fork**，在 npm 上发布为 **`magic-mcp-private`**，并增加可选的 **Cookie** 支持与浏览器**油猴脚本**辅助。其余能力（MCP 功能说明、MasterGo 令牌获取、权限与团队文件要求、Smithery、LINGMA 图文步骤等）与上游一致——**请直接阅读官方 README**，本文不再重复粘贴。
+本仓库是 [mastergo-design/mastergo-magic-mcp](https://github.com/mastergo-design/mastergo-magic-mcp) 的 **fork**，在 npm 上发布为 **`mastergo-magic-mcp-private`**，并增加可选的 **Cookie** 支持与浏览器**油猴脚本**辅助。其余能力（MCP 功能说明、MasterGo 令牌获取、权限与团队文件要求、Smithery、LINGMA 图文步骤等）与上游一致——**请直接阅读官方 README**，本文不再重复粘贴。
 
 ## 官方文档（上游）
 
@@ -11,7 +11,7 @@
 - **中文：** [github.com/mastergo-design/mastergo-magic-mcp — README.zh-CN.md](https://github.com/mastergo-design/mastergo-magic-mcp/blob/main/README.zh-CN.md)
 - **English:** [github.com/mastergo-design/mastergo-magic-mcp — README.md](https://github.com/mastergo-design/mastergo-magic-mcp/blob/main/README.md)
 
-对照官方示例时，请把 **`@mastergo/magic-mcp`** 换成 **`magic-mcp-private`**（`npm` / `npx` / MCP `args`），详见下文 [从上游迁移](#从上游迁移)。
+对照官方示例时，请把 **`@mastergo/magic-mcp`** 换成 **`mastergo-magic-mcp-private`**（`npm` / `npx` / MCP `args`），详见下文 [从上游迁移](#从上游迁移)。
 
 **Cursor 官方说明：** [在 Cursor 中使用 MCP](https://docs.cursor.com/context/model-context-protocol#using-mcp-tools-in-agent)
 
@@ -23,10 +23,18 @@
 
 | | 上游 | 本 fork |
 |---|------|---------|
-| npm 包名 | `@mastergo/magic-mcp` | `magic-mcp-private` |
-| npx | `npx @mastergo/magic-mcp …` | `npx magic-mcp-private …` |
-| MCP `args` | `-y @mastergo/magic-mcp` | `-y magic-mcp-private` |
-| 可执行命令（`package.json` → `bin`） | `mastergo-magic-mcp` | `magic-mcp-private` |
+| npm 包名 | `@mastergo/magic-mcp` | `mastergo-magic-mcp-private` |
+| npx | `npx @mastergo/magic-mcp …` | `npx mastergo-magic-mcp-private …` |
+| MCP `args` | `-y @mastergo/magic-mcp` | `-y mastergo-magic-mcp-private` |
+| 可执行命令（`package.json` → `bin`） | `mastergo-magic-mcp` | `mastergo-magic-mcp-private` |
+
+### **BREAKING**：由 `magic-mcp-private` 更名为现包名（npm）
+
+本 fork 曾在 npm 上以 **`magic-mcp-private`** 发布，现已统一为 **`mastergo-magic-mcp-private`**（与仓库名一致）。
+
+- 若曾安装旧包：可执行 `npm uninstall magic-mcp-private`（若曾全局安装请加 `-g`）。
+- 新安装或运行：使用 `npm install mastergo-magic-mcp-private` 或 `npx -y mastergo-magic-mcp-private ...`。
+- 更新 MCP 配置：将 `-y magic-mcp-private` 改为 `-y mastergo-magic-mcp-private`；脚本中原调用 **`magic-mcp-private`** 的请改为 **`mastergo-magic-mcp-private`**。
 
 ---
 
@@ -35,7 +43,7 @@
 在官方参数基础上，本 fork 增加 **`--cookie`** 及 Cookie 相关环境变量，完整示例如下：
 
 ```text
-npx magic-mcp-private --token=YOUR_TOKEN [--url=API_URL] [--cookie=COOKIE] [--rule=RULE_NAME] [--debug] [--no-rule]
+npx mastergo-magic-mcp-private --token=YOUR_TOKEN [--url=API_URL] [--cookie=COOKIE] [--rule=RULE_NAME] [--debug] [--no-rule]
 ```
 
 | 参数 / 环境变量 | 说明 |
@@ -57,7 +65,7 @@ npx magic-mcp-private --token=YOUR_TOKEN [--url=API_URL] [--cookie=COOKIE] [--ru
 **命令行一行示例：**
 
 ```bash
-npx magic-mcp-private --token=YOUR_TOKEN --url=https://mastergo.com --cookie="session_id=<YOUR_VALUE>; path=/"
+npx mastergo-magic-mcp-private --token=YOUR_TOKEN --url=https://mastergo.com --cookie="session_id=<YOUR_VALUE>; path=/"
 ```
 
 **仅用 MCP `env` 注入 Cookie：**
@@ -65,9 +73,9 @@ npx magic-mcp-private --token=YOUR_TOKEN --url=https://mastergo.com --cookie="se
 ```json
 {
   "mcpServers": {
-    "magic-mcp-private": {
+    "mastergo-magic-mcp-private": {
       "command": "npx",
-      "args": ["-y", "magic-mcp-private", "--token=<YOUR_TOKEN>", "--url=https://mastergo.com"],
+      "args": ["-y", "mastergo-magic-mcp-private", "--token=<YOUR_TOKEN>", "--url=https://mastergo.com"],
       "env": {
         "MG_MCP_COOKIE": "<YOUR_COOKIE_STRING>"
       }
@@ -84,16 +92,16 @@ npx magic-mcp-private --token=YOUR_TOKEN --url=https://mastergo.com --cookie="se
 
 ### Cursor：最小 `mcp.json` 示例
 
-结构与 [上游 README 中的 Cursor 配置示例](https://github.com/mastergo-design/mastergo-magic-mcp/blob/main/README.zh-CN.md) 相同，仅包名替换为 **`magic-mcp-private`**：
+结构与 [上游 README 中的 Cursor 配置示例](https://github.com/mastergo-design/mastergo-magic-mcp/blob/main/README.zh-CN.md) 相同，仅包名替换为 **`mastergo-magic-mcp-private`**：
 
 ```json
 {
   "mcpServers": {
-    "magic-mcp-private": {
+    "mastergo-magic-mcp-private": {
       "command": "npx",
       "args": [
         "-y",
-        "magic-mcp-private",
+        "mastergo-magic-mcp-private",
         "--token=<MG_MCP_TOKEN>",
         "--url=https://mastergo.com"
       ],
@@ -103,7 +111,7 @@ npx magic-mcp-private --token=YOUR_TOKEN --url=https://mastergo.com --cookie="se
 }
 ```
 
-**cline** 等客户端请按上游 README 配置，并将包名改为 **`magic-mcp-private`**。
+**cline** 等客户端请按上游 README 配置，并将包名改为 **`mastergo-magic-mcp-private`**。
 
 ---
 

@@ -3,7 +3,7 @@
 // @namespace    https://github.com/iyyybz/mastergo-magic-mcp-private
 // @version      1.0.0
 // @description  从当前页 document.cookie 中按可配置名称读取并复制 Cookie 值，便于填入 MG_MCP_COOKIE 等。HttpOnly Cookie 对页面脚本不可见，本脚本无法读取。
-// @author       magic-mcp-private
+// @author       mastergo-magic-mcp-private
 // @match        *://*/*
 // @grant        GM_getValue
 // @grant        GM_setValue
