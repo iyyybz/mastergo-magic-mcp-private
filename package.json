@@ -1,6 +1,6 @@
 {
-  "name": "mastergo-magic-mcp-private",
-  "version": "0.1.6-beta.0",
+  "name": "@mastergo/magic-mcp",
+  "version": "0.1.6-beta.3",
   "description": "MasterGo MCP standalone service",
   "main": "dist/index.js",
   "bin": {
@@ -31,7 +31,7 @@
   "private": false,
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.6.1",
-    "axios": "^1.6.0",
+    "axios": "1.6.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {

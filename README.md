@@ -30,6 +30,12 @@ If you used **`@mastergo/magic-mcp`** before:
 | MCP `args` | `-y @mastergo/magic-mcp` | `-y mastergo-magic-mcp-private` |
 | Binary (`package.json` → `bin`) | `mastergo-magic-mcp` | `mastergo-magic-mcp-private` |
 
+```
+git fetch upstream
+git merge upstream/main
+```
+
+
 ### BREAKING: rename from `magic-mcp-private` (npm)
 
 This fork’s npm package was previously published as **`magic-mcp-private`**. It is now **`mastergo-magic-mcp-private`** (aligned with this repository name).
